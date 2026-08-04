@@ -1,0 +1,823 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SECRET STORE - Ultra Professional Desktop UI</title>
+    <!-- FontAwesome Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-dark: #04060A;
+            --card-bg: rgba(13, 18, 28, 0.75);
+            --card-border: rgba(34, 211, 238, 0.15);
+            --card-border-hover: rgba(34, 211, 238, 0.6);
+            --primary-accent: #22d3ee;
+            --secondary-accent: #818cf8;
+            --button-blue: #4f46e5;
+            --button-hover: #6366f1;
+            --text-main: #F8FAFC;
+            --text-sub: #94A3B8;
+            --glow-color: rgba(34, 211, 238, 0.25);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+            position: relative;
+            background-image: 
+                radial-gradient(circle at 15% 15%, rgba(79, 70, 229, 0.12) 0%, transparent 40%),
+                radial-gradient(circle at 85% 85%, rgba(34, 211, 238, 0.12) 0%, transparent 40%);
+            background-attachment: fixed;
+        }
+
+        /* Ambient Animated Grid Background */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Fullscreen Loader Overlay with Cyber Glow */
+        #loader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(4, 6, 10, 0.92);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 999;
+            backdrop-filter: blur(12px);
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border: 3px solid rgba(34, 211, 238, 0.1);
+            border-top: 3px solid var(--primary-accent);
+            border-right: 3px solid var(--secondary-accent);
+            border-radius: 50%;
+            animation: spin 0.7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+            box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+        }
+
+        .loader-text {
+            margin-top: 20px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            color: var(--primary-accent);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
+        }
+
+        /* Desktop Layout Container */
+        .desktop-wrapper {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding: 0 40px;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Dynamic Cursor Glow Effect */
+        .cursor-glow {
+            position: fixed;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.08) 0%, rgba(79, 70, 229, 0.03) 50%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            transition: transform 0.08s ease-out;
+        }
+
+        /* Top Header */
+        header {
+            width: 100%;
+            padding: 28px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 35px;
+        }
+
+        .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.7rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #FFFFFF 30%, var(--primary-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.3));
+        }
+
+        .status-pill {
+            background: rgba(34, 197, 94, 0.08);
+            color: #4ade80;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #4ade80;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #4ade80;
+            animation: pulse-dot 2s infinite;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.3); opacity: 0.6; }
+        }
+
+        /* Main Workspace Area */
+        main {
+            width: 100%;
+            flex: 1;
+            padding-bottom: 50px;
+            z-index: 10;
+        }
+
+        /* Page Transition Animations */
+        .page {
+            display: none;
+            opacity: 0;
+            transform: translateY(15px) scale(0.99);
+            transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Typography */
+        .page-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.3rem;
+            font-weight: 900;
+            text-align: left;
+            margin-bottom: 6px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            background: linear-gradient(180deg, #FFFFFF 20%, #38bdf8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-subtitle {
+            text-align: left;
+            color: var(--text-sub);
+            font-size: 0.95rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 30px;
+        }
+
+        /* Video Container on Page 1 */
+        .dashboard-video-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 22px;
+            margin-bottom: 35px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            transition: border-color 0.3s ease;
+        }
+
+        .dashboard-video-box:hover {
+            border-color: rgba(34, 211, 238, 0.4);
+        }
+
+        .video-container {
+            position: relative;
+            padding-bottom: 45%;
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            border: 0;
+        }
+
+        /* Desktop Multi-Column Grid System */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+        }
+
+        /* Interactive Cyber Cards */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            backdrop-filter: blur(16px);
+        }
+
+        .card::before {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary-accent), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .card:hover {
+            border-color: var(--card-border-hover);
+            transform: translateY(-6px);
+            background: rgba(17, 25, 40, 0.85);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6), 0 0 25px var(--glow-color);
+        }
+
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .card-icon {
+            width: 56px;
+            height: 56px;
+            background: rgba(34, 211, 238, 0.06);
+            border: 1px solid rgba(34, 211, 238, 0.25);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-accent);
+            font-size: 1.6rem;
+            flex-shrink: 0;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover .card-icon {
+            background: var(--primary-accent);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary-accent);
+            transform: scale(1.05);
+        }
+
+        .card-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #FFFFFF;
+        }
+
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            line-height: 1.6;
+        }
+
+        /* Back Button */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-main);
+            padding: 12px 22px;
+            border-radius: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            cursor: pointer;
+            margin-bottom: 28px;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn-back:hover {
+            background: rgba(34, 211, 238, 0.1);
+            border-color: var(--primary-accent);
+            color: var(--primary-accent);
+            box-shadow: 0 0 15px rgba(34, 211, 238, 0.2);
+        }
+
+        /* Centralized Desktop Action Panels */
+        .download-box {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 750px;
+            margin: 0 auto;
+            text-align: center;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .pass-code {
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px dashed rgba(34, 211, 238, 0.4);
+            color: var(--primary-accent);
+            padding: 16px;
+            border-radius: 10px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.3rem;
+            font-weight: 800;
+            letter-spacing: 3px;
+            margin: 20px 0;
+            text-shadow: 0 0 10px rgba(34, 211, 238, 0.5);
+        }
+
+        .btn-action {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--button-blue) 0%, #3730a3 100%);
+            color: #fff;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-transform: uppercase;
+            text-decoration: none;
+            box-shadow: 0 8px 25px rgba(79, 70, 229, 0.35);
+        }
+
+        .btn-action:hover {
+            background: linear-gradient(135deg, var(--button-hover) 0%, var(--button-blue) 100%);
+            box-shadow: 0 12px 30px rgba(79, 70, 229, 0.5), 0 0 20px rgba(99, 102, 241, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .emulator-btn-group, .error-btn-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 25px;
+        }
+
+        .btn-bs5, .btn-msi, .btn-patch, .btn-virtual {
+            flex: 1;
+            padding: 16px;
+            border-radius: 10px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: all 0.25s ease;
+        }
+
+        .btn-bs5 {
+            background: rgba(234, 88, 12, 0.12);
+            color: #fb923c;
+            border: 1px solid rgba(234, 88, 12, 0.35);
+        }
+        .btn-bs5:hover { background: rgba(234, 88, 12, 0.25); box-shadow: 0 0 20px rgba(234, 88, 12, 0.3); }
+
+        .btn-msi {
+            background: rgba(37, 99, 235, 0.12);
+            color: #60a5fa;
+            border: 1px solid rgba(37, 99, 235, 0.35);
+        }
+        .btn-msi:hover { background: rgba(37, 99, 235, 0.25); box-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
+
+        .btn-patch {
+            background: linear-gradient(135deg, #6366f1 0%, #4338ca 100%);
+            color: #fff;
+            border: none;
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        .btn-patch:hover { transform: translateY(-2px); box-shadow: 0 12px 25px rgba(99, 102, 241, 0.5); }
+
+        .btn-virtual {
+            background: rgba(220, 38, 38, 0.12);
+            color: #f87171;
+            border: 1px solid rgba(220, 38, 38, 0.35);
+        }
+        .btn-virtual:hover { background: rgba(220, 38, 38, 0.25); box-shadow: 0 0 20px rgba(220, 38, 38, 0.3); }
+
+        /* Responsive Scaling */
+        @media (max-width: 1024px) {
+            .card-grid { grid-template-columns: repeat(2, 1fr); }
+            .desktop-wrapper { padding: 0 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .card-grid { grid-template-columns: 1fr; }
+            .emulator-btn-group, .error-btn-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Loading Screen Overlay -->
+    <div id="loader-overlay">
+        <div class="spinner"></div>
+        <div class="loader-text">INITIALIZING MODULE...</div>
+    </div>
+
+    <!-- Mouse Tracking Dynamic Glow Effect -->
+    <div class="cursor-glow" id="cursorGlow"></div>
+
+    <div class="desktop-wrapper">
+        <!-- Header Navbar -->
+        <header>
+            <div class="brand">
+                <i class="fa-solid fa-shield-halved" style="color: var(--primary-accent)"></i>
+                SECRET STORE
+            </div>
+            <div class="status-pill">
+                <span class="status-dot"></span> System Online
+            </div>
+        </header>
+
+        <main>
+            <!-- PAGE 1: MAIN DASHBOARD -->
+            <section id="page1" class="page active">
+                <h1 class="page-title">Command Center</h1>
+                <p class="page-subtitle">Select an authorized operational module below to proceed</p>
+
+                <!-- Featured Video Player -->
+                <div class="dashboard-video-box">
+                    <div style="font-family: 'Orbitron', sans-serif; font-size: 0.9rem; margin-bottom: 14px; color: var(--primary-accent); display: flex; align-items: center; gap: 10px; letter-spacing: 1px;">
+                        <i class="fa-solid fa-play"></i> FEATURED BROADCAST / TRAILER
+                    </div>
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/YkE3WuU1DT8" title="Featured Video" allowfullscreen></iframe>
+                    </div>
+                </div>
+
+                <div class="card-grid">
+                    <div class="card" onclick="openPage('page2')">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-box-open"></i></div>
+                            <div class="card-title">Free Area</div>
+                        </div>
+                        <div class="card-desc">Deploy standard Free Panels and optimized FPS Boosters.</div>
+                    </div>
+
+                    <div class="card" onclick="openPage('page_vip')">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-gem"></i></div>
+                            <div class="card-title">VIP Premium</div>
+                        </div>
+                        <div class="card-desc">Lifetime administrative options and custom bypass modes.</div>
+                    </div>
+
+                    <div class="card" onclick="openPage('page_emulator')">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                            <div class="card-title">Best Emulator</div>
+                        </div>
+                        <div class="card-desc">Download secure, modified BlueStacks and MSI engine environments.</div>
+                    </div>
+
+                    <div class="card" onclick="openPage('page_ffob54')">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-fire"></i></div>
+                            <div class="card-title">FF OB54</div>
+                        </div>
+                        <div class="card-desc">Verified client package version for optimal network stability.</div>
+                    </div>
+
+                    <div class="card" onclick="openPage('page_errorfix')">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-wrench"></i></div>
+                            <div class="card-title">Error Fixes</div>
+                        </div>
+                        <div class="card-desc">Resolve runtime conflicts, crashes, and rendering glitches.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 2: FREE AREA -->
+            <section id="page2" class="page">
+                <button class="btn-back" onclick="openPage('page1')">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Command Center
+                </button>
+
+                <h1 class="page-title">Free Area Modules</h1>
+                <p class="page-subtitle">Choose a specific optimization utility to execute</p>
+
+                <div class="card-grid">
+                    <div class="card" onclick="openPage('page3')">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-crosshairs"></i></div>
+                            <div class="card-title">Free Panel</div>
+                        </div>
+                        <div class="card-desc">Precision sensitivity tuning configuration for the latest patch.</div>
+                    </div>
+
+                    <div class="card" onclick="openPage('page_booster')">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-bolt"></i></div>
+                            <div class="card-title">FPS Booster</div>
+                        </div>
+                        <div class="card-desc">Zero latency framing and frame-drop elimination system.</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE 3: DOWNLOAD FREE PANEL -->
+            <section id="page3" class="page">
+                <button class="btn-back" onclick="openPage('page2')">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Free Area
+                </button>
+
+                <div class="download-box">
+                    <h2 style="font-family: 'Orbitron', sans-serif; font-size: 1.6rem; letter-spacing: 1px;">Free Panel Utility</h2>
+
+                    <div style="font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; margin-bottom: 10px;">Verification Video Guide</div>
+                    
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/v_En459kYsM" title="Panel Tutorial" allowfullscreen></iframe>
+                    </div>
+
+                    <div style="font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-top: 20px;">Decryption Key</div>
+                    <div class="pass-code">ZIP PASS - 1</div>
+
+                    <a href="https://linkpays.in/2QxDk" target="_blank" class="btn-action" style="margin-top: 15px;" onclick="playSound()">
+                        <i class="fa-solid fa-download"></i> Download Secure Package
+                    </a>
+                </div>
+            </section>
+
+            <!-- PAGE: FPS BOOSTER -->
+            <section id="page_booster" class="page">
+                <button class="btn-back" onclick="openPage('page2')">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Free Area
+                </button>
+
+                <div class="download-box">
+                    <h2 style="font-family: 'Orbitron', sans-serif; font-size: 1.6rem; letter-spacing: 1px;">FPS Booster Module</h2>
+                    <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 6px; margin-bottom: 15px;">Free Fire FPS Bypass Command File Fix (150+ FPS Target)</p>
+
+                    <div style="font-size: 0.85rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 1px; margin-top: 20px; margin-bottom: 10px;">Verification Video Guide</div>
+                    
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/2LT21pvDlLw" title="FPS Booster Tutorial" allowfullscreen></iframe>
+                    </div>
+
+                    <a href="https://linkpays.in/bcvIwVS" target="_blank" class="btn-action" style="margin-top: 20px;" onclick="playSound()">
+                        <i class="fa-solid fa-download"></i> Download Bypass Script
+                    </a>
+                </div>
+            </section>
+
+            <!-- PAGE: BEST EMULATOR -->
+            <section id="page_emulator" class="page">
+                <button class="btn-back" onclick="openPage('page1')">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Command Center
+                </button>
+
+                <div class="download-box">
+                    <h1 class="page-title" style="font-size: 1.6rem;"><i class="fa-solid fa-laptop-code"></i> Emulation Environment</h1>
+                    <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 6px; margin-bottom: 15px;">Optimized and isolated container setups</p>
+
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/v_En459kYsM" title="Emulator Setup Tutorial" allowfullscreen></iframe>
+                    </div>
+
+                    <div class="emulator-btn-group">
+                        <a href="https://www.mediafire.com/file/busufal10vpl2w5/BLUESTACK_BY_HIDDEN_AMAN.exe/file" target="_blank" class="btn-bs5" onclick="playSound()">
+                            <i class="fa-solid fa-download"></i> BlueStacks 5 Package
+                        </a>
+                        <a href="https://www.mediafire.com/file/370v6nkg8mujy1a/MSI-APP-Player.zip/file" target="_blank" class="btn-msi" onclick="playSound()">
+                            <i class="fa-solid fa-download"></i> MSI App Player Package
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: FF OB54 -->
+            <section id="page_ffob54" class="page">
+                <button class="btn-back" onclick="openPage('page1')">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Command Center
+                </button>
+
+                <div class="download-box">
+                    <h1 class="page-title" style="font-size: 1.6rem;"><i class="fa-solid fa-fire"></i> FF OB54 Client</h1>
+                    <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 6px; margin-bottom: 25px;">FREE FIRE OB54 V7A XAPK Distribution Package</p>
+
+                    <a href="https://www.mediafire.com/file/27grhpklo4wx1ca/FREE+FIRE+OB54+V7A.xapk/file" target="_blank" class="btn-action" onclick="playSound()">
+                        <i class="fa-solid fa-download"></i> Download XAPK Installer
+                    </a>
+                </div>
+            </section>
+
+            <!-- PAGE: ERROR FIXES -->
+            <section id="page_errorfix" class="page">
+                <button class="btn-back" onclick="openPage('page1')">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Command Center
+                </button>
+
+                <div class="download-box">
+                    <h1 class="page-title" style="font-size: 1.6rem;"><i class="fa-solid fa-wrench"></i> System Error Diagnostics</h1>
+                    <p style="color: var(--text-sub); font-size: 0.9rem; margin-top: 6px; margin-bottom: 15px;">Resolve core hardware/software pipeline faults</p>
+
+                    <div class="video-container">
+                        <iframe src="https://www.youtube.com/embed/v_En459kYsM" title="Error Fix Tutorial" allowfullscreen></iframe>
+                    </div>
+
+                    <div class="error-btn-group">
+                        <a href="https://www.mediafire.com/file/dqggswf280vpt5s/HDN+64+BIT+CHAMS.zip/file" target="_blank" class="btn-patch" onclick="playSound()">
+                            <i class="fa-solid fa-screwdriver-wrench"></i> Apply Rendering Patch
+                        </a>
+                        <a href="https://www.mediafire.com/file/4sbbmxkwdnnlszn/HD-DisableHyperV_native_v2.exe/file" target="_blank" class="btn-virtual" onclick="playSound()">
+                            <i class="fa-solid fa-bolt-lightning"></i> Disable Hyper-V Tool
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PAGE: VIP AREA -->
+            <section id="page_vip" class="page">
+                <button class="btn-back" onclick="openPage('page1')">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Command Center
+                </button>
+
+                <h1 class="page-title">VIP Management</h1>
+                <p class="page-subtitle">Secured administrative zone</p>
+
+                <div class="card-grid">
+                    <div class="card" onclick="playSound(); alert('VIP License Session Active')">
+                        <div class="card-header">
+                            <div class="card-icon"><i class="fa-solid fa-key"></i></div>
+                            <div class="card-title">VIP Authorization</div>
+                        </div>
+                        <div class="card-desc">Lifetime operational authentication module.</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        // --- ADVANCED AUDIO ENGINE (Web Audio API + Buffer for Zero Lag) ---
+        let audioCtx = null;
+        let audioBuffer = null;
+
+        // Load Wav Sound File from local directory
+        function loadSound() {
+            fetch('clickMouse.wav')
+                .then(response => response.arrayBuffer())
+                .then(arrayBuffer => {
+                    if (audioCtx) {
+                        return audioCtx.decodeAudioData(arrayBuffer);
+                    }
+                })
+                .then(decodedData => {
+                    audioBuffer = decodedData;
+                })
+                .catch(err => console.log('Audio Preload Note:', err));
+        }
+
+        // Initialize Audio Context on user interaction
+        function initAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                loadSound();
+            }
+        }
+
+        function playSound() {
+            initAudioContext();
+            if (audioCtx && audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            if (audioBuffer && audioCtx) {
+                const source = audioCtx.createBufferSource();
+                source.buffer = audioBuffer;
+                source.connect(audioCtx.destination);
+                source.start(0);
+            } else {
+                // Fallback for immediate fallback playback
+                const fallbackAudio = new Audio('clickMouse.wav');
+                fallbackAudio.play().catch(() => {});
+            }
+        }
+
+        // Preload sound immediately
+        window.addEventListener('DOMContentLoaded', () => {
+            initAudioContext();
+        });
+
+        // --- PAGE SWITCHING & UI LOGIC ---
+        function openPage(pageId) {
+            playSound();
+            
+            const loader = document.getElementById('loader-overlay');
+            const pages = document.querySelectorAll('.page');
+
+            loader.style.display = 'flex';
+
+            setTimeout(() => {
+                pages.forEach(p => p.classList.remove('active'));
+                const targetPage = document.getElementById(pageId);
+                if(targetPage) {
+                    targetPage.classList.add('active');
+                }
+                loader.style.display = 'none';
+            }, 450);
+        }
+
+        // Dynamic Glow Tracking
+        const cursorGlow = document.getElementById('cursorGlow');
+        document.addEventListener('mousemove', (e) => {
+            cursorGlow.style.left = e.clientX + 'px';
+            cursorGlow.style.top = e.clientY + 'px';
+        });
+    </script>
+
+</body>
+</html>

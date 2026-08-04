@@ -146,19 +146,14 @@ header {
     transition: 0.3s;
 }
 
-.btn-connect:hover {
-    background: #4b59ff;
-    box-shadow: 0 0 25px rgba(93, 107, 255, 0.7);
-}
-
-/* Main Cards Grid Layout */
+/* Grid Layout */
 .grid-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 18px;
 }
 
-/* Mouse Glow Card Styling */
+/* Card Styling */
 .card {
     background: #0b1021;
     border: 1px solid #19233c;
@@ -173,7 +168,6 @@ header {
     overflow: hidden;
 }
 
-/* Mouse Cursor Following Glow Light */
 .card::before {
     content: "";
     position: absolute;
@@ -244,11 +238,65 @@ header {
     box-shadow: 0 10px 30px rgba(93, 107, 255, 0.3);
 }
 
-.card:hover .card-link {
-    color: #ffffff;
+/* Download Details Box Styling */
+.download-box {
+    background: #0b1021;
+    border: 1px solid #19233c;
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 500px;
+    margin-bottom: 20px;
 }
 
-/* Navigation Back Button */
+.info-item {
+    background: #151d38;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-item label {
+    font-size: 13px;
+    color: #94a3b8;
+    font-weight: 600;
+}
+
+.info-item span {
+    font-family: 'Orbitron', sans-serif;
+    color: #10b981;
+    font-weight: 700;
+    font-size: 16px;
+}
+
+.btn-download {
+    background: linear-gradient(90deg, #5d6bff 0%, #4b59ff 100%);
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 14px;
+    border-radius: 10px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(93, 107, 255, 0.4);
+    transition: 0.3s;
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-download:hover {
+    box-shadow: 0 0 30px rgba(93, 107, 255, 0.8);
+    transform: translateY(-2px);
+}
+
 .btn-back {
     background: #19233c;
     color: #ffffff;
@@ -266,7 +314,7 @@ header {
     border-color: #5d6bff;
 }
 
-/* Page Display Logic */
+/* Page Visibility */
 .page {
     display: none;
 }
@@ -286,8 +334,8 @@ header {
         </div>
     </header>
 
+    <!-- HOME PAGE -->
     <div id="home" class="page active">
-        
         <div class="workspace-title">
             <span>// ADMINISTRATION WORKSPACE</span>
             <h1>Command Center</h1>
@@ -306,7 +354,6 @@ header {
         </div>
 
         <div class="grid-container">
-            
             <div class="card" onclick="showPage('freeArea')">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-gift"></i></div>
@@ -342,11 +389,10 @@ header {
                 </div>
                 <div class="card-link">DOWNLOAD CLIENT &rarr;</div>
             </div>
-
         </div>
     </div>
 
-
+    <!-- FREE AREA -->
     <div id="freeArea" class="page">
         <div class="workspace-title">
             <span>// MODULES</span>
@@ -355,29 +401,29 @@ header {
         </div>
 
         <div class="grid-container">
-            <div class="card" onclick="openLink('https://linkpays.in/2QxDk')">
+            <div class="card" onclick="openDownload('FREE PANEL', 'https://linkpays.in/2QxDk', 'freeArea')">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-sliders"></i></div>
                     <h3>FREE PANEL</h3>
                     <p>Access free configuration settings.</p>
                 </div>
-                <div class="card-link">LAUNCH LINK &rarr;</div>
+                <div class="card-link">GET FILE &rarr;</div>
             </div>
 
-            <div class="card" onclick="openLink('https://linkpays.in/bcvIwVS')">
+            <div class="card" onclick="openDownload('FPS BOOSTER', 'https://linkpays.in/bcvIwVS', 'freeArea')">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-gauge-high"></i></div>
                     <h3>FPS BOOSTER</h3>
                     <p>Boost game performance and clear lag.</p>
                 </div>
-                <div class="card-link">LAUNCH LINK &rarr;</div>
+                <div class="card-link">GET FILE &rarr;</div>
             </div>
         </div>
 
         <button class="btn-back" onclick="goHome()">&larr; BACK</button>
     </div>
 
-
+    <!-- EMULATOR PAGE -->
     <div id="emulator" class="page">
         <div class="workspace-title">
             <span>// ENGINES</span>
@@ -386,29 +432,29 @@ header {
         </div>
 
         <div class="grid-container">
-            <div class="card">
+            <div class="card" onclick="openDownload('BS MSI 4', '#', 'emulator')">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-microchip"></i></div>
                     <h3>BS MSI 4</h3>
                     <p>Optimized low-end PC version.</p>
                 </div>
-                <div class="card-link">DOWNLOAD &rarr;</div>
+                <div class="card-link">GET FILE &rarr;</div>
             </div>
 
-            <div class="card">
+            <div class="card" onclick="openDownload('BS MSI 5', '#', 'emulator')">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-server"></i></div>
                     <h3>BS MSI 5</h3>
                     <p>High performance ultra-fast version.</p>
                 </div>
-                <div class="card-link">DOWNLOAD &rarr;</div>
+                <div class="card-link">GET FILE &rarr;</div>
             </div>
         </div>
 
         <button class="btn-back" onclick="goHome()">&larr; BACK</button>
     </div>
 
-
+    <!-- ERROR FIX PAGE -->
     <div id="errorFix" class="page">
         <div class="workspace-title">
             <span>// DIAGNOSTICS</span>
@@ -417,20 +463,20 @@ header {
         </div>
 
         <div class="grid-container">
-            <div class="card">
+            <div class="card" onclick="openDownload('CRASH FIX TOOL', '#', 'errorFix')">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-bug"></i></div>
                     <h3>Crash Fix Tool</h3>
                     <p>Fix unexpected emulator closes.</p>
                 </div>
-                <div class="card-link">FIX NOW &rarr;</div>
+                <div class="card-link">GET FILE &rarr;</div>
             </div>
         </div>
 
         <button class="btn-back" onclick="goHome()">&larr; BACK</button>
     </div>
 
-
+    <!-- OB54 PAGE -->
     <div id="ob54" class="page">
         <div class="workspace-title">
             <span>// GAME CLIENT</span>
@@ -439,22 +485,48 @@ header {
         </div>
 
         <div class="grid-container">
-            <div class="card">
+            <div class="card" onclick="openDownload('OB54 APK + OBB', '#', 'ob54')">
                 <div>
                     <div class="card-icon"><i class="fa-solid fa-download"></i></div>
                     <h3>OB54 APK + OBB</h3>
                     <p>Verified latest game update files.</p>
                 </div>
-                <div class="card-link">GET FILES &rarr;</div>
+                <div class="card-link">GET FILE &rarr;</div>
             </div>
         </div>
 
         <button class="btn-back" onclick="goHome()">&larr; BACK</button>
     </div>
 
+    <!-- DYNAMIC DOWNLOAD INTERFACE PAGE -->
+    <div id="downloadPage" class="page">
+        <div class="workspace-title">
+            <span>// DOWNLOAD CENTER</span>
+            <h1 id="downloadTitle">FILE NAME</h1>
+            <p>Follow instructions below to extract the file.</p>
+        </div>
+
+        <div class="download-box">
+            <div class="info-item">
+                <label><i class="fa-solid fa-file-zipper"></i> RAR PASSWORD</label>
+                <span>1</span> <!-- Bas RAR Pass 1 set hai -->
+            </div>
+
+            <div class="info-item">
+                <label><i class="fa-solid fa-circle-play"></i> TUTORIAL VIDEO</label>
+                <a href="https://youtube.com" target="_blank" style="color: #5d6bff; text-decoration: none; font-weight: 700; font-size: 13px;">WATCH VIDEO &rarr;</a>
+            </div>
+
+            <button id="finalDownloadBtn" class="btn-download">
+                <i class="fa-solid fa-download"></i> DOWNLOAD NOW
+            </button>
+        </div>
+
+        <button id="downloadBackBtn" class="btn-back">&larr; BACK</button>
+    </div>
 
 <script>
-// Mouse Move Tracking Effect for Glow
+// Mouse Glow Effect
 document.querySelectorAll('.card').forEach(card => {
     card.addEventListener('mousemove', e => {
         const rect = card.getBoundingClientRect();
@@ -466,25 +538,38 @@ document.querySelectorAll('.card').forEach(card => {
     });
 });
 
-// Navigation Pages Function
+// Page Navigation
 function showPage(pageId) {
     const pages = document.querySelectorAll('.page');
     pages.forEach(p => p.classList.remove('active'));
     
     document.getElementById(pageId).classList.add('active');
+    window.scrollTo(0, 0);
 }
 
-// Go Back To Home
 function goHome() {
-    const pages = document.querySelectorAll('.page');
-    pages.forEach(p => p.classList.remove('active'));
-    
-    document.getElementById('home').classList.add('active');
+    showPage('home');
 }
 
-// Open Link Function
-function openLink(url) {
-    window.open(url, '_blank');
+// Open Dynamic Download Page
+function openDownload(itemName, downloadUrl, previousPageId) {
+    // Title badlega
+    document.getElementById('downloadTitle').innerText = itemName;
+    
+    // Download Link Set hoga
+    const downloadBtn = document.getElementById('finalDownloadBtn');
+    downloadBtn.onclick = function() {
+        window.open(downloadUrl, '_blank');
+    };
+
+    // Back Button purane page par le jayega
+    const backBtn = document.getElementById('downloadBackBtn');
+    backBtn.onclick = function() {
+        showPage(previousPageId);
+    };
+
+    // Download Page open hoga
+    showPage('downloadPage');
 }
 </script>
 
